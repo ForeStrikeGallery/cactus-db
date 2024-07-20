@@ -28,9 +28,10 @@ class CactusClient:
 
     def get(self, key):
         try:
-            with urlopen("{}/{}".format(self.get_url, key)) as response:
+            with urlopen("{}?key={}".format(self.get_url, key)) as response:
                 return response.read()
         except Exception as e:
+            print(e)
             raise CactusException("Get call failed", e)
 
     def put(self, key, value):
