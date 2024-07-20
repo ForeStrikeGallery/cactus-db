@@ -5,6 +5,7 @@ import (
     "net/http"
     "net/url"
     "io/ioutil"
+    _ "net/http/pprof"
 )
 
 type Handler struct {
@@ -60,9 +61,16 @@ func (h *Handler) put(w http.ResponseWriter, r *http.Request) {
     
 
 func main() {
+    // start pprof HTTP server in separate goroutine for debugging 
+
+    go func() {
+        fmt.Println("Starting pprof server on :6060")
+		http.ListenAndServe(":6060", nil)
+    }()
+
     h := Handler{
         store: Store{
-            data: make(map[string]string),
+            data: make(map[string]string, 40000),
         },
     }
 

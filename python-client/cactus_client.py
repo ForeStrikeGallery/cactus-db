@@ -5,10 +5,8 @@ from cactus_exception import CactusException
 
 def make_request(url, headers=None, data=None):
     headers = headers if headers is not None else {}
-
-    print("post data", data)
-
     request = Request(url, headers=headers, data=data)
+
     try:
         with urlopen(request, timeout=10) as response:
             return response.read(), response
