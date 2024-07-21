@@ -13,7 +13,7 @@ type Store struct {
 
 func (s *Store) Put(key string, value string) error {
    s.data[key] = value  
-   fmt.Println("successfully put value in data")
+   // fmt.Println("successfully put value in data")
    return nil 
 }
 

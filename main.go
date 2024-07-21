@@ -6,6 +6,7 @@ import (
     "net/url"
     "io/ioutil"
     _ "net/http/pprof"
+    "time"
 )
 
 type Handler struct {
@@ -55,8 +56,6 @@ func (h *Handler) put(w http.ResponseWriter, r *http.Request) {
             http.StatusInternalServerError)
         return 
     }
-
-    fmt.Println("Put!") 
 }
     
 
@@ -68,16 +67,29 @@ func main() {
 		http.ListenAndServe(":6060", nil)
     }()
 
+
+    /*
+    store := Store{
+        data: make(map[string]string, 10000),
+    }
+
+    BenchmarkWrites(store, 1000000)
+    BenchmarkReads(store, 1000000)
+    */
+
     h := Handler{
         store: Store{
             data: make(map[string]string, 40000),
         },
     }
-
     http.HandleFunc("/get", h.get)
     http.HandleFunc("/put", h.put)
 
     fmt.Println("Cactus Server Running..")
-    err := http.ListenAndServe(":3001", nil) 
-    fmt.Println(err)
+    go http.ListenAndServe(":3001", nil) 
+    time.Sleep(1 * time.Second)
+
+    BenchHTTPut(10000)
+    // BenchHTTPGet(10000)
+    fmt.Scanln()
 }
